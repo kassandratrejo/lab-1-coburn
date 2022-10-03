@@ -1,0 +1,79 @@
+---
+title: "131 EDA"
+output: html_document
+date: "2022-10-02"
+---
+Machine Learning Ideas 
+
+Question 1:
+We are interested in highway miles per gallon, or the hwy variable. Create a histogram of this variable. Describe what you see/learn.
+
+```{r}
+hist(mpg$hwy)
+```
+In the histogram of highway miles per gallon it appears to be bimodal where the high peaks are noticed at 15-20 and 25-30. 
+
+Question 2:
+Create a scatter plot. Put hwy on the x-axis and cty on the y-axis. Describe what you notice. Is there a relationship between hwy and cty? What does this mean?
+
+```{r}
+plot(mpg$hwy, mpg$cty)
+```
+There appears to be a linear relationship between hwy and cty. It seems to be positively correlated, this means that as the highway miles per gallon increase so does the city miles per gallon. 
+
+Question 3:
+Make a bar plot of manufacturer. Flip it so that the manufacturers are on the y-axis. Order the bars by height. Which manufacturer produced the most cars? Which produced the least?
+
+```{r}
+ggplot(data=mpg, aes(x=reorder(factor(manufacturer), manufacturer, function(x) length(x)))) + geom_bar()+ coord_flip()
+#count<-table(mpg$manufacturer)
+#barplot(count,main="Manufactureres",horiz=TRUE,)
+```
+The manufacturer that produced the most cars was dodge and lincoln produced the least. 
+
+Question 4:
+Make a box plot of hwy, grouped by cyl. Do you see a pattern? If so, what?
+
+```{r}
+boxplot(hwy~cyl,data=mpg)
+```
+In the hwy boxplot there seems to be a pattern where the higher cylinder cars have a lower highway miles per gallon compared to cars that have lower cylinder cars. 
+
+Question 5:
+Use the corrplot package to make a lower triangle correlation matrix of the mpg dataset. (Hint: You can find information on the package here.)
+
+Which variables are positively or negatively correlated with which others? Do these relationships make sense to you? Are there any that surprise you?
+
+```{r}
+new_data<-mpg[c(3,4,5,8,9)]
+new_data
+```
+```{r}
+N=cor(new_data)
+corrplot(N,type="lower",method="number")
+```
+Cty has a negative correlation with displ and cyl and a positive correlation with cty. Hwy also has negative correlations with displ and cyl and positive correlations with cty and hwy. Year and displ have positive correlations with each other. Cyl has a positive correlation with displ and itself. These relationships make sense because it is expected for each subject to have a positive correlation with itself. I was surprised that there are negative correlations with the other respective variables. 
+
+
+Exploratory Data Analysis
+
+1. Define supervised and unsupervised learning. What are the differences between them? 
+ Supervised learning involves building a model to predict or estimate an outcome based on one or more given inputs. Unsupervised learning involves learning relationships and structure with no output. Supervised learning is seen in the form of linear and logistic regression, decision trees, and random forests. Unsupervised learning can be seen as k-means clustering, neural networks, and hierarchical clustering. 
+
+2.Explain the difference between a regression model and a classification model, specifically in the context of machine learning. 
+A regression model uses quantitative data and it produces a continuous output value whereas a classification model qualitative or categorical values. A classification model can predict the number of passengers that survived or if the stock market will go up or down. 
+
+3.Name two commonly used metrics for regression ML problems. Name two commonly used metrics for classification ML problems.
+For regression ML problems we use mean square error and mean absolute error as metrics. 
+For classification ML problems we use K nearest neighbor and error rate as our metrics.
+
+4.Provide a brief description of each: descriptive, inferential, predictive models 
+Descriptive models: We want to choose a model that will best encapsulate the trends we see in our data.
+Inferential models: We want to state the relationship between the outcome and its predictors. Highlight the most significant features in our data. 
+Predictive models: We want the best combinations of predictors that will predict Y with the least reducible error. 
+
+5.Define mechanistic. Define empirically driven. How do these model types differ? How are they similar?In general, is a mechanistic or empirically-driven model easier to understand? Explain your choice. Describe how the bias-variance tradeoff is related to the use of mechanistic or empirically-driven models. 
+Mechanistic is also referred to as parametric models, in this case we assume a parametric form or a linear model. In a parametric model we can add more parameters to make the function more flexible however this can lead to a problem known as overfitting where the model picks up too much of the noise and will build patterns for ones that are not there. An empirically driven model is referred to as non-parametric, in this instance there are no assumptions about f and it requires a larger number of observations. These model types differ in that mechanistic models assume a parametric form for our function whereas empirically driven does not. They are similar in that both are prone to overfitting. Although empirically driven is more flexible by default and therefore overfitting is common, in mechanistic if more observations are added then it is likelier to have overfitting. A mechanistic model may be easier to understand because we assume a parametric form for f. We assume that f is linear and are now tasked with estimating a set of parameters as opposed to fitting an entire arbitrary function. The bias-variance tradeoff is related to mechanistic and empirically-driven models in that a more flexible model will have a lower bias and a higher variance and vice versa. In this tradeoff the higher model flexibility will also have a lower training MSE and will match the data points better.  
+
+6.Given a voter’s profile/data, how likely is it that they will vote in favor of the candidate? How would a voter’s likelihood of support for the candidate change if they had personal contact with the candidate? Classify each question as either predictive or inferential. Explain your reasoning. 
+The first question is classified as predictive because we are making a prediction that is yet to happen. We are estimating how likely the voter will vote for the candidate based upon input variables. The second question is classified as inferential because we are examining the relationship between the predictor and response variables. How does the value of support change with respect to the value of personal contact the voter has with the candidate, this is what is expected from an inferential question. 
